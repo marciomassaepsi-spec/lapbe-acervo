@@ -45,6 +45,13 @@ export default async function Entrar({ searchParams }: PageProps<"/entrar">) {
             <BotaoGoogle trocarConta={erro === "acesso"} />
           )}
         </div>
+        <p className="muted" style={{ fontSize: 13, maxWidth: 360 }}>
+          Site de materiais de estudo exclusivo para membros da LAPBE. O login usa apenas seu nome e e-mail do Google.
+        </p>
+        <nav className="entrar-links" aria-label="Informações legais">
+          <Link href="/privacidade">Política de Privacidade</Link>
+          <Link href="/termos">Termos de Uso</Link>
+        </nav>
       </div>
     </div>
   );

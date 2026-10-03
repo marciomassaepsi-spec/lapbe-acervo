@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const ABERTAS = ["/entrar", "/auth"];
+const ABERTAS = ["/entrar", "/auth", "/privacidade", "/termos"];
 
 /** Renova a sessão do Supabase e manda quem não entrou para /entrar. */
 export async function atualizarSessao(request: NextRequest) {
