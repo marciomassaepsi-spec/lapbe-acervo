@@ -11,17 +11,38 @@ export const PASTA_MIME = "application/vnd.google-apps.folder";
 
 let cliente: JWT | null = null;
 
+type Credenciais = { email: string; chave: string };
+
+/**
+ * Lê a conta de serviço de GOOGLE_SERVICE_ACCOUNT_JSON (o arquivo .json inteiro colado numa variável)
+ * ou, se preferir, de GOOGLE_SERVICE_ACCOUNT_EMAIL + GOOGLE_SERVICE_ACCOUNT_KEY.
+ */
+function credenciais(): Credenciais | null {
+  const json = process.env.GOOGLE_SERVICE_ACCOUNT_JSON?.trim();
+  if (json) {
+    try {
+      const dados = JSON.parse(json) as { client_email?: unknown; private_key?: unknown };
+      if (typeof dados.client_email === "string" && typeof dados.private_key === "string") {
+        return { email: dados.client_email, chave: dados.private_key };
+      }
+    } catch {
+      // JSON colado pela metade ou com aspas a mais: tenta as variáveis separadas.
+    }
+  }
+  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL?.trim();
+  const chave = process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.trim().replace(/^"|"$/g, "").replace(/\\n/g, "\n");
+  return email && chave ? { email, chave } : null;
+}
+
 export function driveConfigurado() {
-  return Boolean(process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_SERVICE_ACCOUNT_KEY);
+  return credenciais() !== null;
 }
 
 async function token() {
   if (!cliente) {
-    cliente = new JWT({
-      email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-      key: process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.replace(/\\n/g, "\n"),
-      scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-    });
+    const c = credenciais();
+    if (!c) throw new Error("Conta de serviço do Google não configurada.");
+    cliente = new JWT({ email: c.email, key: c.chave, scopes: ["https://www.googleapis.com/auth/drive.readonly"] });
   }
   const { token: t } = await cliente.getAccessToken();
   if (!t) throw new Error("Não foi possível autenticar no Google Drive.");

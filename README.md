@@ -73,7 +73,7 @@ para quem está logado e é membro.
    (dá para trocar para `lapbe` em Settings → Domains, se estiver livre).
 3. Em **Environment Variables**, cadastre as variáveis do arquivo [`.env.example`](.env.example):
    - `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_KEY` (passo 1)
-   - `GOOGLE_SERVICE_ACCOUNT_EMAIL` e `GOOGLE_SERVICE_ACCOUNT_KEY` (campos `client_email` e `private_key` do JSON)
+   - `GOOGLE_SERVICE_ACCOUNT_JSON` (o conteúdo inteiro do arquivo `.json` da conta de serviço)
    - `DRIVE_FOLDER_ID` (passo 3)
 4. Clique em **Deploy**.
 5. Volte ao Supabase em **Authentication → URL Configuration**:

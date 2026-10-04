@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
   if (modoDemo()) return NextResponse.json({ raiz: "demo", arquivos: pasta === "demo-pasta-2026-2-encontros" ? EXEMPLO.slice(1) : EXEMPLO });
   if (!driveConfigurado() || !raiz) {
-    return NextResponse.json({ erro: "Configure GOOGLE_SERVICE_ACCOUNT_* e DRIVE_FOLDER_ID para listar o Drive." }, { status: 503 });
+    return NextResponse.json({ erro: "Configure GOOGLE_SERVICE_ACCOUNT_JSON e DRIVE_FOLDER_ID para listar o Drive." }, { status: 503 });
   }
   try {
     return NextResponse.json({ raiz, arquivos: await listarPasta(pasta) });
